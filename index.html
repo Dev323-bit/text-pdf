@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Text → PDF — Private, Client-Side Text to PDF Converter</title>
+    <meta name="description"
+        content="Convert your plain text to a clean, professionally formatted PDF document. 100% client-side with total privacy—your text never leaves your device.">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <!-- Ambient Aura Background Blobs -->
+    <div class="aura-bg">
+        <div class="aura-blob aura-blob-1"></div>
+        <div class="aura-blob aura-blob-2"></div>
+        <div class="aura-blob aura-blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Aura <span>Text → PDF</span></h1>
+            <p class="subtitle">Convert plain text into clean, printable PDFs. Completely client-side for absolute privacy.</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <!-- Left Side: Editor Area -->
+            <section class="editor-card">
+                <!-- Text Styling Quick Controls Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <label for="font-family" class="toolbar-label">
+                            <i data-lucide="font" style="width: 14px; height: 14px;"></i> Font
+                        </label>
+                        <select id="font-family" class="toolbar-select">
+                            <option value="helvetica" selected>Helvetica (Sans-Serif)</option>
+                            <option value="times">Times (Serif)</option>
+                            <option value="courier">Courier (Monospace)</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <label for="font-size" class="toolbar-label">
+                            <i data-lucide="type" style="width: 14px; height: 14px;"></i> Size
+                        </label>
+                        <select id="font-size" class="toolbar-select">
+                            <option value="9">9 pt</option>
+                            <option value="10">10 pt</option>
+                            <option value="11">11 pt</option>
+                            <option value="12" selected>12 pt</option>
+                            <option value="14">14 pt</option>
+                            <option value="16">16 pt</option>
+                            <option value="18">18 pt</option>
+                            <option value="20">20 pt</option>
+                            <option value="24">24 pt</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <span class="toolbar-label">
+                            <i data-lucide="align-left" style="width: 14px; height: 14px;"></i> Align
+                        </span>
+                        <div class="align-selector">
+                            <button type="button" class="align-btn active" data-align="left" title="Align Left">
+                                <i data-lucide="align-left" style="width: 14px; height: 14px;"></i>
+                            </button>
+                            <button type="button" class="align-btn" data-align="center" title="Align Center">
+                                <i data-lucide="align-center" style="width: 14px; height: 14px;"></i>
+                            </button>
+                            <button type="button" class="align-btn" data-align="right" title="Align Right">
+                                <i data-lucide="align-right" style="width: 14px; height: 14px;"></i>
+                            </button>
+                            <button type="button" class="align-btn" data-align="justify" title="Justify">
+                                <i data-lucide="align-justify" style="width: 14px; height: 14px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Text Input -->
+                <div class="textarea-container">
+                    <textarea id="text-input" placeholder="Type or paste your text here... All wrapping, page splits, and formatting are handled automatically." autocomplete="off" spellcheck="true"></textarea>
+                </div>
+
+                <!-- Textarea Info Footer -->
+                <div class="editor-footer">
+                    <div class="stats-counter">
+                        <span class="stat-item"><strong id="word-count">0</strong> words</span>
+                        <span class="stat-divider">|</span>
+                        <span class="stat-item"><strong id="char-count">0</strong> characters</span>
+                        <span class="stat-divider">|</span>
+                        <span class="stat-item"><strong id="line-count">0</strong> lines</span>
+                    </div>
+                    <button id="clear-btn" class="text-btn destructive" title="Clear text and reset formatting">
+                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                        Clear Text
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Side: PDF Page Layout & Export Settings -->
+            <section class="settings-card">
+                <!-- Page Configuration Section -->
+                <div class="settings-section">
+                    <h3 class="section-title">
+                        <i data-lucide="layout" style="width: 16px; height: 16px; color: var(--color-primary);"></i>
+                        Page Setup
+                    </h3>
+                    
+                    <div class="control-row">
+                        <div class="control-col">
+                            <label for="page-size" class="control-label">Size</label>
+                            <select id="page-size" class="control-select">
+                                <option value="a4" selected>A4 (210 x 297 mm)</option>
+                                <option value="letter">Letter (8.5 x 11 in)</option>
+                                <option value="legal">Legal (8.5 x 14 in)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-col">
+                            <label for="page-orientation" class="control-label">Orientation</label>
+                            <select id="page-orientation" class="control-select">
+                                <option value="portrait" selected>Portrait</option>
+                                <option value="landscape">Landscape</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-row">
+                        <div class="control-col">
+                            <label for="page-margins" class="control-label">Margins</label>
+                            <select id="page-margins" class="control-select">
+                                <option value="10">Small (10mm)</option>
+                                <option value="20" selected>Normal (20mm)</option>
+                                <option value="30">Large (30mm)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-col">
+                            <label for="line-spacing" class="control-label">Line Spacing</label>
+                            <select id="line-spacing" class="control-select">
+                                <option value="1.15" selected>1.15 (Tight)</option>
+                                <option value="1.3">1.3 (Default)</option>
+                                <option value="1.5">1.5 (Relaxed)</option>
+                                <option value="2.0">2.0 (Double)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Styling & Header Settings Section -->
+                <div class="settings-section">
+                    <h3 class="section-title">
+                        <i data-lucide="sliders" style="width: 16px; height: 16px; color: var(--color-primary);"></i>
+                        Document Styling
+                    </h3>
+
+                    <!-- Text Color Preset Selection -->
+                    <div class="control-col" style="margin-bottom: 16px;">
+                        <label class="control-label">Text Color</label>
+                        <div class="color-picker-group">
+                            <div class="color-presets" id="color-presets">
+                                <button type="button" class="color-preset active" data-color="#000000" style="background-color: #ffffff; border: 1px solid #ddd;" title="Classic Black"></button>
+                                <button type="button" class="color-preset" data-color="#334155" style="background-color: #475569;" title="Charcoal Gray"></button>
+                                <button type="button" class="color-preset" data-color="#1e3a8a" style="background-color: #2563eb;" title="Navy Blue"></button>
+                                <button type="button" class="color-preset" data-color="#064e3b" style="background-color: #059669;" title="Forest Green"></button>
+                                <button type="button" class="color-preset" data-color="#7f1d1d" style="background-color: #dc2626;" title="Deep Red"></button>
+                            </div>
+                            <span class="color-name-label" id="selected-color-name">Classic Black</span>
+                        </div>
+                    </div>
+
+                    <!-- Header/Footer Layout Options -->
+                    <div class="checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="enable-header" checked>
+                            <span class="checkbox-checkmark"></span>
+                            Include Header Title
+                        </label>
+                        <div class="nested-input-container" id="header-input-container">
+                            <input type="text" id="header-text" class="sub-input" placeholder="Enter document header title..." value="AURA DOCUMENT EXPORT">
+                        </div>
+
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="enable-page-numbers" checked>
+                            <span class="checkbox-checkmark"></span>
+                            Include Page Numbers
+                        </label>
+
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="enable-date">
+                            <span class="checkbox-checkmark"></span>
+                            Stamp Export Date
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Filename and Download Settings -->
+                <div class="settings-section export-section">
+                    <div class="control-col" style="margin-bottom: 20px;">
+                        <label for="pdf-filename" class="control-label">Save Filename</label>
+                        <div class="filename-input-wrapper">
+                            <input type="text" id="pdf-filename" class="filename-input" placeholder="aura-text-export" value="aura-text-export">
+                            <span class="filename-suffix">.pdf</span>
+                        </div>
+                    </div>
+
+                    <button id="download-btn" class="primary-btn full-width">
+                        <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
+                        Generate & Download PDF
+                    </button>
+
+                    <div class="privacy-badge-container">
+                        <span class="privacy-badge">
+                            <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+                            100% client-side. Your text never leaves your browser.
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>Part of the <strong class="aura-title">Aura</strong> utility series — 100% private client-side utilities.</p>
+            <div class="footer-links">
+                <a href="../pdf-compressor" class="footer-link">Aura Compressor</a>
+                <span class="bullet">•</span>
+                <a href="../pdf-splitter" class="footer-link">Aura Splitter</a>
+                <span class="bullet">•</span>
+                <a href="../color-palette-extractor" class="footer-link">Aura Palette</a>
+                <span class="bullet">•</span>
+                <a href="../img-converter" class="footer-link">Aura Convert</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- External Libraries (CDNs) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Main Application Script -->
+    <script src="app.js"></script>
+</body>
+
+</html>
